@@ -7,12 +7,14 @@
 package examples
 
 import (
+	"context"
 	"github.com/dtm-labs/client/dtmcli"
 	"github.com/dtm-labs/client/dtmcli/logger"
 	"github.com/dtm-labs/dtm-examples/busi"
 	"github.com/dtm-labs/dtm-examples/dtmutil"
 	"github.com/go-resty/resty/v2"
 	"github.com/lithammer/shortuuid/v3"
+	"go.opentelemetry.io/otel"
 )
 
 func init() {
@@ -30,8 +32,13 @@ func init() {
 	})
 	AddCommand("http_tcc", func() string {
 		logger.Debugf("tcc simple transaction begin")
+		ctx := context.Background()
+		tracer := otel.GetTracerProvider().Tracer("dtm_examples")
+		ctx, span := tracer.Start(ctx, "http_tcc")
+		defer span.End()
+
 		gid := shortuuid.New()
-		err := dtmcli.TccGlobalTransaction(dtmutil.DefaultHTTPServer, gid, func(tcc *dtmcli.Tcc) (*resty.Response, error) {
+		err := dtmcli.TccGlobalTransactionCtx(ctx, dtmutil.DefaultHTTPServer, gid, func(t *dtmcli.Tcc) {}, func(tcc *dtmcli.Tcc) (*resty.Response, error) {
 			resp, err := tcc.CallBranch(&busi.ReqHTTP{Amount: 30}, busi.Busi+"/TransOut", busi.Busi+"/TransOutConfirm", busi.Busi+"/TransOutRevert")
 			if err != nil {
 				return resp, err

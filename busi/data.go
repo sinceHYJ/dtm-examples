@@ -85,7 +85,7 @@ func sagaGrpcAdjustBalance(db dtmcli.DB, uid int, amount int64, result string) e
 	if result == dtmcli.ResultFailure {
 		return status.New(codes.Aborted, dtmcli.ResultFailure).Err()
 	}
-	_, err := dtmimp.DBExec(BusiConf.Driver, db, "update dtm_busi.user_account set balance = balance + ? where user_id = ?", amount, uid)
+	_, err := dtmimp.DBExec(context.Background(), BusiConf.Driver, db, "update dtm_busi.user_account set balance = balance + ? where user_id = ?", amount, uid)
 	return err
 }
 
@@ -94,7 +94,7 @@ func SagaAdjustBalance(db dtmcli.DB, uid int, amount int, result string) error {
 	if strings.Contains(result, dtmcli.ResultFailure) {
 		return dtmcli.ErrFailure
 	}
-	_, err := dtmimp.DBExec(BusiConf.Driver, db, "update dtm_busi.user_account set balance = balance + ? where user_id = ?", amount, uid)
+	_, err := dtmimp.DBExec(context.Background(), BusiConf.Driver, db, "update dtm_busi.user_account set balance = balance + ? where user_id = ?", amount, uid)
 	return err
 }
 
@@ -124,7 +124,7 @@ func SagaMongoAdjustBalance(ctx context.Context, mc *mongo.Client, uid int, amou
 }
 
 func tccAdjustTrading(db dtmcli.DB, uid int, amount int) error {
-	affected, err := dtmimp.DBExec(BusiConf.Driver, db, `update dtm_busi.user_account
+	affected, err := dtmimp.DBExec(context.Background(), BusiConf.Driver, db, `update dtm_busi.user_account
 		set trading_balance=trading_balance+?
 		where user_id=? and trading_balance + ? + balance >= 0`, amount, uid, amount)
 	if err == nil && affected == 0 {
@@ -134,7 +134,7 @@ func tccAdjustTrading(db dtmcli.DB, uid int, amount int) error {
 }
 
 func tccAdjustBalance(db dtmcli.DB, uid int, amount int) error {
-	affected, err := dtmimp.DBExec(BusiConf.Driver, db, `update dtm_busi.user_account
+	affected, err := dtmimp.DBExec(context.Background(), BusiConf.Driver, db, `update dtm_busi.user_account
 		set trading_balance=trading_balance-?,
 		balance=balance+? where user_id=?`, amount, amount, uid)
 	if err == nil && affected == 0 {

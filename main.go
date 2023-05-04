@@ -54,6 +54,8 @@ func main() {
 	examples.AddRoutes(app)
 	time.Sleep(200 * time.Millisecond)
 	cmd := os.Args[1]
+	initProvider(context.Background(), "localhost:4316")
+
 	if cmd == "qs" {
 		go busi.RunHTTP(app)
 		time.Sleep(200 * time.Millisecond)
@@ -75,7 +77,6 @@ func main() {
 	} else {
 		hintExit("unknown command: " + cmd)
 	}
-	initProvider(context.Background(), "localhost:4316")
 	select {}
 }
 
@@ -83,7 +84,7 @@ func initProvider(ctx context.Context, otelEndpoint string) (func(context.Contex
 	res, err := resource.New(ctx,
 		resource.WithAttributes(
 			// the service name used to display traces in backends
-			semconv.ServiceName("dtmsvr"),
+			semconv.ServiceName("dtm_examples"),
 		),
 	)
 	if err != nil {
