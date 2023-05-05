@@ -24,6 +24,8 @@ import (
 	"github.com/dtm-labs/client/dtmcli"
 	"github.com/dtm-labs/client/dtmcli/dtmimp"
 	"github.com/dtm-labs/client/dtmcli/logger"
+
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 // GetGinApp init and return gin
@@ -31,6 +33,7 @@ func GetGinApp() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	app := gin.New()
 	app.Use(gin.Recovery())
+	app.Use(otelgin.Middleware("dtm-examples"))
 	app.Use(func(c *gin.Context) {
 		body := ""
 		if c.Request.Body != nil {

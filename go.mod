@@ -63,6 +63,7 @@ require (
 	github.com/xdg-go/scram v1.0.2 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
+	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.40.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.28.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/internal/retry v1.14.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.14.0 // indirect
@@ -85,4 +86,4 @@ require (
 
 // replace github.com/dtm-labs/client/dtmgrpc => /Users/wangxi/dtm/dtmgrpc
 
-replace github.com/dtm-labs/client v1.15.1 => /Users/administrator/cp/project/client
+replace github.com/dtm-labs/client v1.15.1 => /Users/yufu/cp/project/client
