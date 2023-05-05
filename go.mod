@@ -91,4 +91,4 @@ require (
 
 // replace github.com/dtm-labs/client/dtmgrpc => /Users/wangxi/dtm/dtmgrpc
 
-replace github.com/dtm-labs/client v1.15.1 => /Users/yufu/cp/project/client
+replace github.com/dtm-labs/client v1.15.1 => /Users/administrator/cp/project/client
